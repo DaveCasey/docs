@@ -66,6 +66,56 @@ void loop()
   digitalWrite(led, LOW);    // Turn OFF the LED
   delay(1000);               // Wait for 1 second
 }
+
+// Important: delay() with values larger than 10000
+// can make it difficult to reprogram your Spark Core later
+// for longer delays, try the next example
+```
+Blink an LED with longer delays
+===
+Long delays can make it difficult to reprogram your Spark Core.  According to this discussion:
+https://community.spark.io/t/known-issue-long-delays-or-blocking-code-kills-the-connection-to-the-cloud/950 "Passive delays by counting millis()" is a better practice.
+
+Here is the the same example as above, with a passiveDelay() function to allow longer pauses if you want them.
+
+```cpp
+// Program to blink an LED connected to pin D0
+// of the Spark Core.
+// using long passive delays
+
+// We name pin D0 as led
+int led = D0;
+
+// This routine runs only once upon reset
+void setup()
+{
+  // Initialize D0 pin as output
+  pinMode(led, OUTPUT);
+}
+
+// This routine loops forever
+void loop()
+{
+
+
+  digitalWrite(led, HIGH);   // Turn ON the LED
+  passiveDelay(10000);               // Wait for 10000mS = 10 seconds
+  digitalWrite(led, LOW);    // Turn OFF the LED
+  passiveDelay(10000);               // Wait for 10 seconds
+}
+
+// function passiveDelay() loops for specified number
+// of milliseconds before returning
+// this helps avoid problems caused by long delay()
+int passiveDelay(unsigned long delayValue)
+{
+  unsigned long startTime = millis();
+  while(millis()<(delayValue+startTime))
+  {
+  //empty loop
+  }
+  return 0;
+}
 ```
 
 Control LEDs over the 'net
